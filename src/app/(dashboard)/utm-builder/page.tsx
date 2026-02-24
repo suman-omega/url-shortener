@@ -26,17 +26,17 @@ export default function UTMBuilder() {
   return (
     <div className="mx-auto max-w-3xl">
       <div className="text-center mb-10">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl mb-4">
+        <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl mb-4">
           UTM Builder - Free Google URL Builder
         </h1>
-        <p className="text-slate-600 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed">
           Fill all the required fields (marked with *) and other campaign
           information. A final URL with UTM codes will be automatically created.
           Copy the generated URL and use it in your campaigns.
         </p>
       </div>
 
-      <Card className="border-none shadow-md bg-white">
+      <Card className="border-none shadow-md">
         <CardContent className="pt-8 space-y-8">
           <FormField
             label="Website URL"
@@ -107,14 +107,14 @@ export default function UTMBuilder() {
           />
 
           {/* Generated URL Section */}
-          <div className="pt-8 border-t border-slate-100">
+          <div className="pt-8 border-t border-slate-100 dark:border-slate-800">
             <div className="mb-4">
-              <h3 className="text-sm font-bold uppercase tracking-widest text-slate-700">
+              <h3 className="text-sm font-bold uppercase tracking-widest text-slate-700 dark:text-slate-300">
                 GENERATED UTM TRACKING URL
               </h3>
             </div>
             <div className="relative">
-              <div className="min-h-[100px] w-full p-4 rounded-lg bg-indigo-50/50 border border-indigo-100 text-indigo-900 break-all font-mono text-sm leading-relaxed">
+              <div className="min-h-[100px] w-full p-4 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/50 text-indigo-900 dark:text-indigo-200 break-all font-mono text-sm leading-relaxed">
                 {generatedUrl ||
                   "Fill in the Website URL to generate tracking link..."}
               </div>

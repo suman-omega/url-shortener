@@ -11,15 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
-import {
-  Eye,
-  EyeOff,
-  Link2,
-  Loader2,
-  Lock,
-  Mail,
-  ShieldCheck,
-} from "lucide-react";
+import { Eye, EyeOff, Link2, Loader2, Lock, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -114,17 +106,19 @@ export default function LoginPage() {
       </div>
 
       {/* Right Side - Login Form */}
-      <div className="flex items-center justify-center p-6 sm:p-12 bg-slate-50 dark:bg-slate-950">
+      <div className="flex items-center justify-center p-6 sm:p-12 bg-background text-foreground">
         <div className="w-full max-w-md space-y-8">
           <div className="lg:hidden flex flex-col items-center text-center mb-8">
             <div className="flex items-center gap-2 font-bold text-2xl text-indigo-600 mb-2">
               <Link2 className="w-8 h-8" />
               <span>HTR Link Manager</span>
             </div>
-            <p className="text-slate-500">Sign in to manage your short links</p>
+            <p className="text-muted-foreground">
+              Sign in to manage your short links
+            </p>
           </div>
 
-          <Card className="border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none bg-white dark:bg-slate-900">
+          <Card className="border-border shadow-xl shadow-slate-200/50 dark:shadow-none">
             <CardHeader className="space-y-1">
               <CardTitle className="text-2xl font-bold text-center">
                 Login
@@ -196,13 +190,6 @@ export default function LoginPage() {
               </form>
             </CardContent>
           </Card>
-
-          <div className="text-center text-sm text-slate-500 mt-8">
-            <div className="flex items-center justify-center gap-2">
-              <ShieldCheck className="w-4 h-4" />
-              <span>Secure, encrypted authentication by Better-Auth</span>
-            </div>
-          </div>
         </div>
       </div>
     </div>

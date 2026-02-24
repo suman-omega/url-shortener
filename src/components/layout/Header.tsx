@@ -1,6 +1,7 @@
 import { User } from "better-auth";
 import { BarChart3, Link2, ShieldCheck, Zap } from "lucide-react";
 import Link from "next/link";
+import { ThemeToggle } from "../theme-toggle";
 import { UserNav } from "../user-nav";
 
 const NAVITEMS = [
@@ -36,7 +37,7 @@ interface HeaderProps {
 
 export function Header({ user }: HeaderProps) {
   return (
-    <header className="h-16 border-b bg-white dark:bg-slate-900 px-6 flex items-center justify-between sticky top-0 z-10">
+    <header className="h-16 border-b bg-card text-card-foreground px-6 flex items-center justify-between sticky top-0 z-10">
       <Link
         href="/"
         className="flex items-center gap-2 font-bold text-xl text-indigo-600"
@@ -49,7 +50,7 @@ export function Header({ user }: HeaderProps) {
           <Link
             key={item.id}
             href={item.href}
-            className="text-sm font-medium hover:text-indigo-600 transition-colors flex items-center gap-2"
+            className="text-sm font-medium hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 transition-colors flex items-center gap-2"
           >
             <item.icon className="w-4 h-4" />
             {item.label}
@@ -57,6 +58,7 @@ export function Header({ user }: HeaderProps) {
         ))}
       </nav>
       <div className="flex items-center gap-4">
+        <ThemeToggle />
         <UserNav user={user} />
       </div>
     </header>
