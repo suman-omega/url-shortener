@@ -31,19 +31,29 @@ export default function UTMBuilder() {
       }
 
       try {
-        const url = new URL(formData.websiteUrl);
-        const params = new URLSearchParams();
-
-        if (formData.source) params.append("utm_source", formData.source);
-        if (formData.medium) params.append("utm_medium", formData.medium);
-        if (formData.campaign) params.append("utm_campaign", formData.campaign);
-        if (formData.content) params.append("utm_content", formData.content);
-        if (formData.term) params.append("utm_term", formData.term);
-
-        const queryString = params.toString();
-        setGeneratedUrl(
-          `${formData.websiteUrl}${formData.websiteUrl.includes("?") ? "&" : "?"}${queryString}`,
+        const url = new URL(
+          formData.websiteUrl.startsWith("http")
+            ? formData.websiteUrl
+            : `https://${formData.websiteUrl}`,
         );
+
+        if (formData.source) {
+          url.searchParams.set("utm_source", formData.source);
+        }
+        if (formData.medium) {
+          url.searchParams.set("utm_medium", formData.medium);
+        }
+        if (formData.campaign) {
+          url.searchParams.set("utm_campaign", formData.campaign);
+        }
+        if (formData.content) {
+          url.searchParams.set("utm_content", formData.content);
+        }
+        if (formData.term) {
+          url.searchParams.set("utm_term", formData.term);
+        }
+
+        setGeneratedUrl(url.toString());
       } catch {
         setGeneratedUrl("");
       }
@@ -94,7 +104,7 @@ export default function UTMBuilder() {
                   <Input
                     id="websiteUrl"
                     name="websiteUrl"
-                    placeholder="https://htrcare.com/windsor-maidenhead-bracknell"
+                    placeholder="https://htrcare.com/windsor-ascot"
                     value={formData.websiteUrl}
                     onChange={handleChange}
                     className="h-12 border-slate-200 focus:border-indigo-500 focus:ring-indigo-500"

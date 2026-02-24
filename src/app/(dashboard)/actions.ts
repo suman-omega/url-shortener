@@ -30,6 +30,7 @@ export async function createLink(formData: FormData) {
   });
 
   revalidatePath("/links");
+  return { slug };
 }
 
 export async function deleteLink(id: string) {

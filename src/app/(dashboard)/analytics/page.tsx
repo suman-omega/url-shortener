@@ -95,7 +95,7 @@ export default async function AnalyticsPage() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-3">
-        <Card className="border-none shadow-sm">
+        <Card>
           <CardHeader>
             <CardTitle className="text-sm font-semibold uppercase tracking-wider text-slate-500">
               By Source
@@ -120,7 +120,7 @@ export default async function AnalyticsPage() {
           </CardContent>
         </Card>
 
-        <Card border-none shadow-sm>
+        <Card>
           <CardHeader>
             <CardTitle className="text-sm font-semibold uppercase tracking-wider text-slate-500">
               By Campaign
@@ -145,7 +145,7 @@ export default async function AnalyticsPage() {
           </CardContent>
         </Card>
 
-        <Card border-none shadow-sm>
+        <Card>
           <CardHeader>
             <CardTitle className="text-sm font-semibold uppercase tracking-wider text-slate-500">
               By Postcode/Zone

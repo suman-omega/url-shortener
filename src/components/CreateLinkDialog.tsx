@@ -25,8 +25,14 @@ export function CreateLinkDialog() {
     const formData = new FormData(e.currentTarget);
 
     try {
-      await createLink(formData);
-      toast.success("Link created successfully!");
+      const result = await createLink(formData);
+      if (result?.slug) {
+        const shortUrl = `https://go.htrcare.com/${result.slug}`;
+        await navigator.clipboard.writeText(shortUrl);
+        toast.success("Short URL copied to clipboard!");
+      } else {
+        toast.success("Link created successfully!");
+      }
       setOpen(false);
     } catch {
       toast.error("Failed to create link.");

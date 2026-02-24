@@ -32,7 +32,7 @@ export function validateUrl(url: string) {
     const domain = parsedUrl.hostname;
 
     return allowedDomains.some((d) => domain === d || domain.endsWith("." + d));
-  } catch (e) {
+  } catch {
     return false;
   }
 }
