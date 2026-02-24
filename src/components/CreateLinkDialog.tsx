@@ -11,15 +11,23 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { generateRandomSlug } from "@/lib/slug-utils";
 import { Loader2, PlusCircle } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export function CreateLinkDialog() {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [slug, setSlug] = useState("");
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  useEffect(() => {
+    if (open) {
+      setSlug(generateRandomSlug());
+    }
+  }, [open]);
+
+  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
     const formData = new FormData(e.currentTarget);
@@ -59,6 +67,8 @@ export function CreateLinkDialog() {
             <Input
               id="slug"
               name="slug"
+              value={slug}
+              onChange={(e) => setSlug(e.target.value)}
               placeholder="e.g. ascot-nextdoor"
               required
             />
