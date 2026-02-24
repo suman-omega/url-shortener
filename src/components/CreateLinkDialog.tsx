@@ -27,7 +27,7 @@ export function CreateLinkDialog() {
     try {
       const result = await createLink(formData);
       if (result?.slug) {
-        const shortUrl = `https://go.htrcare.com/${result.slug}`;
+        const shortUrl = `${window.location.origin}/${result.slug}`;
         await navigator.clipboard.writeText(shortUrl);
         toast.success("Short URL copied to clipboard!");
       } else {
@@ -44,7 +44,7 @@ export function CreateLinkDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-indigo-600 hover:bg-indigo-700">
+        <Button className="bg-indigo-700 hover:bg-indigo-600 cursor-pointer text-white">
           <PlusCircle className="w-4 h-4 mr-2" />
           Create New Link
         </Button>

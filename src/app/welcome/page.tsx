@@ -1,3 +1,4 @@
+import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, BarChart3, Globe, Shield, Zap } from "lucide-react";
@@ -30,14 +31,11 @@ export default function Home() {
             >
               Solutions
             </a>
-            <Link
-              href="/utm-builder"
-              className="text-sm font-medium text-slate-600 transition-colors hover:text-indigo-600"
-            >
-              UTM Builder
-            </Link>
             <Link href="/">
-              <Button variant="default" className="rounded-full px-6">
+              <Button
+                variant="default"
+                className="rounded-full px-6 cursor-pointer"
+              >
                 Admin Dashboard
               </Button>
             </Link>
@@ -141,37 +139,9 @@ export default function Home() {
         </section>
 
         {/* Integration Stats */}
-        <section className="px-6 py-24 bg-white border-y border-slate-100">
-          <div className="mx-auto max-w-7xl text-center">
-            <h2 className="mb-12 text-sm font-semibold uppercase tracking-widest text-slate-500">
-              Trusted by HTR Care outreach teams
-            </h2>
-            <div className="flex flex-wrap justify-center gap-12 opacity-50 grayscale transition-all hover:opacity-100 hover:grayscale-0">
-              {/* Replace with actual logos or text-based logos */}
-              <div className="text-2xl font-bold text-slate-400">NEXTDOOR</div>
-              <div className="text-2xl font-bold text-slate-400">FACEBOOK</div>
-              <div className="text-2xl font-bold text-slate-400">GOOGLE</div>
-              <div className="text-2xl font-bold text-slate-400">WHATSAPP</div>
-            </div>
-          </div>
-        </section>
       </main>
 
-      <footer className="border-t border-slate-200 bg-white py-12">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
-            <div className="flex items-center gap-2">
-              <Zap className="h-5 w-5 text-indigo-600 fill-indigo-600" />
-              <span className="text-lg font-bold tracking-tight text-slate-900">
-                HTR Care Go
-              </span>
-            </div>
-            <p className="text-sm text-slate-500">
-              &copy; {new Date().getFullYear()} HTR Care. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

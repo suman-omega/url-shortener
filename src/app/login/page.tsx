@@ -11,7 +11,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
-import { Link2, Loader2, Lock, Mail, ShieldCheck } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  Link2,
+  Loader2,
+  Lock,
+  Mail,
+  ShieldCheck,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -19,6 +27,7 @@ import { toast } from "sonner";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -149,12 +158,25 @@ export default function LoginPage() {
                     <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                     <Input
                       id="password"
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       className="pl-10"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
+                      placeholder="●●●●●●●●"
                       required
                     />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      className="absolute right-1 top-2 h-4 w-4 text-slate-400 cursor-pointer hover:text-slate-600 hover:bg-slate-100"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <Eye className="h-4 w-4" />
+                      ) : (
+                        <EyeOff className="h-4 w-4" />
+                      )}
+                    </Button>
                   </div>
                 </div>
                 <Button

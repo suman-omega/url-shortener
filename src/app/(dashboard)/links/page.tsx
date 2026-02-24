@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic";
 
+import { CopyLinkButton } from "@/components/CopyLinkButton";
 import { CreateLinkDialog } from "@/components/CreateLinkDialog";
 import { DeleteLinkButton } from "@/components/DeleteLinkButton";
 import {
@@ -81,6 +82,7 @@ export default async function LinksPage() {
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
+                      <CopyLinkButton slug={link.slug} />
                       <DeleteLinkButton id={link.id} />
                     </div>
                   </TableCell>
