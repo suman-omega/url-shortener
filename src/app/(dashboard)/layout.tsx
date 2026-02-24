@@ -1,6 +1,5 @@
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
-import { Toaster } from "@/components/ui/sonner";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -27,7 +26,6 @@ export default async function AdminLayout({
         <div className="max-w-7xl mx-auto space-y-8">{children}</div>
       </main>
       <Footer />
-      <Toaster />
     </div>
   );
 }

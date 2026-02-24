@@ -42,8 +42,12 @@ export function CreateLinkDialog() {
         toast.success("Link created successfully!");
       }
       setOpen(false);
-    } catch {
-      toast.error("Failed to create link.");
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        toast.error(e.message);
+      } else {
+        toast.error("Something went wrong");
+      }
     } finally {
       setLoading(false);
     }
