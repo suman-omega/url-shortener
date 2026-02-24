@@ -75,7 +75,7 @@ export default async function AdminDashboard() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <Card className="border-none shadow-sm">
+        <Card className="border shadow-sm">
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>Recent Activity</CardTitle>
             <Clock className="w-4 h-4 text-muted-foreground" />
@@ -114,7 +114,7 @@ export default async function AdminDashboard() {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-none shadow-sm">
+        <Card className="border shadow-sm">
           <CardHeader>
             <CardTitle>Campaign Distribution</CardTitle>
           </CardHeader>

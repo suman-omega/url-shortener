@@ -21,7 +21,7 @@ export default async function AdminLayout({
   const user = session.user;
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col">
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
       <Header user={user} />
       <main className="flex-1 p-6 md:p-8 lg:p-12">
         <div className="max-w-7xl mx-auto space-y-8">{children}</div>
