@@ -10,28 +10,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { db } from "@/db";
-import { clicks, links } from "@/db/schema";
-import { count, desc, eq } from "drizzle-orm";
+import { getAllLinksWithStats } from "@/lib/services/links";
 import { ExternalLink } from "lucide-react";
 
 export default async function LinksPage() {
-  const allLinks = await db.query.links.findMany({
-    orderBy: [desc(links.createdAt)],
-  });
-
-  // Fetch click counts for each link
-  const linkStats = await Promise.all(
-    allLinks.map(async (link) => {
-      const stats = await db
-        .select({ value: count() })
-        .from(clicks)
-        .where(eq(clicks.linkId, link.id));
-      return { id: link.id, clickCount: stats[0].value };
-    }),
-  );
-
-  const statsMap = new Map(linkStats.map((s) => [s.id, s.clickCount]));
+  const links = await getAllLinksWithStats();
 
   return (
     <div className="space-y-6">
@@ -57,7 +40,7 @@ export default async function LinksPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {allLinks.length === 0 ? (
+            {links.length === 0 ? (
               <TableRow>
                 <TableCell
                   colSpan={5}
@@ -68,12 +51,11 @@ export default async function LinksPage() {
                 </TableCell>
               </TableRow>
             ) : (
-              allLinks.map((link) => (
+              links.map((link) => (
                 <TableRow key={link.id}>
                   <TableCell className="font-medium">
                     <div className="flex items-center gap-2 group">
                       <span className="text-indigo-600">/{link.slug}</span>
-                      {/* Copy button would be client side, keeping it simple for now */}
                     </div>
                   </TableCell>
                   <TableCell>
@@ -95,7 +77,7 @@ export default async function LinksPage() {
                     </span>
                   </TableCell>
                   <TableCell className="text-center font-mono font-bold">
-                    {statsMap.get(link.id) || 0}
+                    {link.clickCount}
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">

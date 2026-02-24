@@ -7,7 +7,7 @@ export function ExportCSVButton({
   data,
   filename,
 }: {
-  data: Record<string, any>[];
+  data: Record<string, unknown>[];
   filename: string;
 }) {
   const exportToCSV = () => {

@@ -1,80 +1,20 @@
 export const dynamic = "force-dynamic";
 
 import { CampaignChart } from "@/components/CampaignChart";
+import { StatCard } from "@/components/dashboard/StatCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { db } from "@/db";
-import { clicks, links } from "@/db/schema";
+import {
+  getCampaignDistribution,
+  getDashboardStats,
+  getRecentActivity,
+} from "@/lib/services/dashboard";
 import { formatDistanceToNow } from "date-fns";
-import { count, desc, eq, sql } from "drizzle-orm";
 import { Clock, Globe, Link2, MousePointer2, TrendingUp } from "lucide-react";
 
 export default async function AdminDashboard() {
-  // Fetch real stats from DB
-  let totalLinks = 0;
-  let totalClicks = 0;
-  let topCampaign = "N/A";
-  let recentClicks: {
-    id: string;
-    slug: string | null;
-    timestamp: Date;
-    ip: string | null;
-  }[] = [];
-  let campaignDistribution: { name: string; total: number }[] = [];
-
-  try {
-    const linksCount = await db.select({ value: count() }).from(links);
-    totalLinks = linksCount[0].value;
-
-    const clicksCount = await db.select({ value: count() }).from(clicks);
-    totalClicks = clicksCount[0].value;
-
-    // Get top campaign from links table by aggregate
-    const campaigns = await db
-      .select({
-        campaign: links.utmCampaign,
-        count: count(clicks.id),
-      })
-      .from(links)
-      .leftJoin(clicks, eq(links.id, clicks.linkId))
-      .groupBy(links.utmCampaign)
-      .orderBy(sql`count desc`)
-      .limit(1);
-
-    topCampaign = campaigns[0]?.campaign || "None";
-
-    // Fetch recent activity
-    recentClicks = await db
-      .select({
-        id: clicks.id,
-        slug: links.slug,
-        timestamp: clicks.timestamp,
-        ip: clicks.ipAddress,
-      })
-      .from(clicks)
-      .leftJoin(links, eq(clicks.linkId, links.id))
-      .orderBy(desc(clicks.timestamp))
-      .limit(5);
-
-    // Fetch campaign distribution
-    const distribution = await db
-      .select({
-        name: links.utmCampaign,
-        total: count(clicks.id),
-      })
-      .from(links)
-      .leftJoin(clicks, eq(links.id, clicks.linkId))
-      .where(sql`${links.utmCampaign} IS NOT NULL`)
-      .groupBy(links.utmCampaign)
-      .orderBy(desc(count(clicks.id)))
-      .limit(5);
-
-    campaignDistribution = distribution.map((d) => ({
-      name: d.name || "Unknown",
-      total: Number(d.total),
-    }));
-  } catch (e) {
-    console.error("Dashboard stats fetch failed:", e);
-  }
+  const { totalLinks, totalClicks, topCampaign } = await getDashboardStats();
+  const recentClicks = await getRecentActivity();
+  const campaignDistribution = await getCampaignDistribution();
 
   const stats = [
     {
@@ -100,10 +40,11 @@ export default async function AdminDashboard() {
     },
     {
       title: "Top Source",
-      value: "Nextdoor",
+      value: "Nextdoor", // This could also be dynamic if needed
       icon: Globe,
       color: "text-amber-600",
       bg: "bg-amber-50",
+      description: "Main lead generator",
     },
   ];
 
@@ -121,27 +62,15 @@ export default async function AdminDashboard() {
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (
-          <Card
+          <StatCard
             key={stat.title}
-            className="border-none shadow-sm transition-all hover:shadow-md"
-          >
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">
-                {stat.title}
-              </CardTitle>
-              <div className={`${stat.bg} p-2 rounded-lg`}>
-                <stat.icon className={`w-4 h-4 ${stat.color}`} />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stat.value}</div>
-              <p className="text-xs text-muted-foreground mt-1">
-                {stat.title === "Top Source"
-                  ? "Main lead generator"
-                  : "Updated just now"}
-              </p>
-            </CardContent>
-          </Card>
+            title={stat.title}
+            value={stat.value}
+            icon={stat.icon}
+            color={stat.color}
+            bg={stat.bg}
+            description={stat.description || "Updated just now"}
+          />
         ))}
       </div>
 

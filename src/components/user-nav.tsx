@@ -11,16 +11,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth-client";
+import { User } from "better-auth";
 import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 interface UserNavProps {
-  user: {
-    name: string;
-    email: string;
-    image?: string | null;
-  };
+  user: User;
 }
 
 export function UserNav({ user }: UserNavProps) {
