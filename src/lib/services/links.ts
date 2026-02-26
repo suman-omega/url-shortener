@@ -4,9 +4,16 @@ import { db } from "@/db";
 import { clicks, links } from "@/db/schema";
 import { count, desc, eq } from "drizzle-orm";
 
-export async function getAllLinksWithStats() {
+export async function getAllLinksWithStats(
+  page: number = 1,
+  limit: number = 10,
+) {
+  const offset = (page - 1) * limit;
+
   const allLinks = await db.query.links.findMany({
     orderBy: [desc(links.createdAt)],
+    limit,
+    offset,
   });
 
   // Fetch click counts for each link
@@ -26,4 +33,9 @@ export async function getAllLinksWithStats() {
     ...link,
     clickCount: statsMap.get(link.id) || 0,
   }));
+}
+
+export async function getLinksTotalCount() {
+  const [result] = await db.select({ value: count() }).from(links);
+  return result?.value ?? 0;
 }
