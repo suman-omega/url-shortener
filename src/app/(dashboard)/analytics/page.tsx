@@ -111,7 +111,7 @@ export default async function AnalyticsPage() {
                   <span className="text-sm font-medium">
                     {s.source || "Direct"}
                   </span>
-                  <span className="text-sm font-mono bg-slate-100 px-2 py-0.5 rounded">
+                  <span className="text-sm font-mono bg-slate-100 px-2 py-0.5 rounded dark:bg-slate-800 dark:text-slate-200">
                     {s.count}
                   </span>
                 </div>
@@ -136,7 +136,7 @@ export default async function AnalyticsPage() {
                   <span className="text-sm font-medium truncate max-w-[150px]">
                     {c.campaign || "None"}
                   </span>
-                  <span className="text-sm font-mono bg-slate-100 px-2 py-0.5 rounded">
+                  <span className="text-sm font-mono bg-slate-100 px-2 py-0.5 rounded dark:bg-slate-800 dark:text-slate-200">
                     {c.count}
                   </span>
                 </div>
@@ -155,8 +155,10 @@ export default async function AnalyticsPage() {
             <div className="space-y-3">
               {Object.entries(postcodeStats).map(([zone, count]) => (
                 <div key={zone} className="flex justify-between items-center">
-                  <span className="text-sm font-medium">{zone}</span>
-                  <span className="text-sm font-mono bg-slate-100 px-2 py-0.5 rounded">
+                  <span className="text-sm font-medium dark:text-slate-200">
+                    {zone}
+                  </span>
+                  <span className="text-sm font-mono bg-slate-100 px-2 py-0.5 rounded dark:bg-slate-800 dark:text-slate-200">
                     {count}
                   </span>
                 </div>
