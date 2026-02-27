@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic";
 
+import { AnalyticsPagination } from "@/components/analytics/AnalyticsPagination";
 import { CopyLinkButton } from "@/components/CopyLinkButton";
 import { CreateLinkDialog } from "@/components/CreateLinkDialog";
 import { DeleteLinkButton } from "@/components/DeleteLinkButton";
@@ -11,11 +12,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getAllLinksWithStats } from "@/lib/services/links";
+import { getAllLinksWithStats, getLinksTotalCount } from "@/lib/services/links";
 import { ExternalLink } from "lucide-react";
 
-export default async function LinksPage() {
-  const links = await getAllLinksWithStats();
+export default async function LinksPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const resolvedParams = await searchParams;
+  const currentPage = Number(resolvedParams.page) || 1;
+  const limit = 10;
+
+  const [links, totalCount] = await Promise.all([
+    getAllLinksWithStats(currentPage, limit),
+    getLinksTotalCount(),
+  ]);
+
+  const totalPages = Math.ceil(totalCount / limit);
 
   return (
     <div className="space-y-6">
@@ -91,6 +105,13 @@ export default async function LinksPage() {
             )}
           </TableBody>
         </Table>
+
+        <AnalyticsPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          baseUrl="/links"
+          searchParams={{ page: currentPage.toString() }}
+        />
       </div>
     </div>
   );

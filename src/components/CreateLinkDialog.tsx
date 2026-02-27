@@ -1,6 +1,9 @@
 "use client";
 
-import { createLink } from "@/app/(dashboard)/actions";
+import { Loader2, PlusCircle } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,10 +14,8 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { createLink } from "@/lib/services/links";
 import { generateRandomSlug } from "@/lib/slug-utils";
-import { Loader2, PlusCircle } from "lucide-react";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
 
 export function CreateLinkDialog() {
   const [open, setOpen] = useState(false);

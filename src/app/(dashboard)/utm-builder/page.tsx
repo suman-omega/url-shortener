@@ -18,7 +18,7 @@ export default function UTMBuilder() {
     if (!generatedUrl) return;
     navigator.clipboard.writeText(generatedUrl);
     setCopied(true);
-    toast.success("URL copied to clipboard!", { position: "top-center" });
+    toast.success("URL copied to clipboard!");
     router.push("/links");
     setTimeout(() => setCopied(false), 2000);
   };

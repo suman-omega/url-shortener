@@ -1,7 +1,7 @@
 "use client";
 
-import { deleteLink } from "@/app/(dashboard)/actions";
 import { Button } from "@/components/ui/button";
+import { deleteLink } from "@/lib/services/links";
 import { Loader2, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
