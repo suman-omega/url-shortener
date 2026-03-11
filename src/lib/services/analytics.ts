@@ -105,26 +105,59 @@ export async function getAnalyticsBreakdowns(filters: AnalyticsFilters) {
     .groupBy(links.utmCampaign)
     .orderBy(sql`count desc`);
 
-  const clicksWithSlugs = await db
+  const mediumBreakdown = await db
     .select({
-      slug: links.slug,
+      medium: links.utmMedium,
       count: count(clicks.id),
     })
     .from(clicks)
     .leftJoin(links, eq(clicks.linkId, links.id))
     .where(whereClause)
-    .groupBy(links.slug);
+    .groupBy(links.utmMedium)
+    .orderBy(sql`count desc`);
 
-  const postcodeStats = clicksWithSlugs.reduce(
-    (acc, curr) => {
-      const slug = curr.slug || "";
-      const match = slug.match(/^(sl[4-5]|ascot|windsor)/i);
-      const zone = match ? match[0].toUpperCase() : "Other";
-      acc[zone] = (acc[zone] || 0) + Number(curr.count);
-      return acc;
-    },
-    {} as Record<string, number>,
-  );
+  const contentBreakdown = await db
+    .select({
+      content: links.utmContent,
+      count: count(clicks.id),
+    })
+    .from(clicks)
+    .leftJoin(links, eq(clicks.linkId, links.id))
+    .where(whereClause)
+    .groupBy(links.utmContent)
+    .orderBy(sql`count desc`);
+
+  const termBreakdown = await db
+    .select({
+      term: links.utmTerm,
+      count: count(clicks.id),
+    })
+    .from(clicks)
+    .leftJoin(links, eq(clicks.linkId, links.id))
+    .where(whereClause)
+    .groupBy(links.utmTerm)
+    .orderBy(sql`count desc`);
+
+  // const clicksWithSlugs = await db
+  //   .select({
+  //     slug: links.slug,
+  //     count: count(clicks.id),
+  //   })
+  //   .from(clicks)
+  //   .leftJoin(links, eq(clicks.linkId, links.id))
+  //   .where(whereClause)
+  //   .groupBy(links.slug);
+
+  // const postcodeStats = clicksWithSlugs.reduce(
+  //   (acc, curr) => {
+  //     const slug = curr.slug || "";
+  //     const match = slug.match(/^(sl[4-5]|ascot|windsor)/i);
+  //     const zone = match ? match[0].toUpperCase() : "Other";
+  //     acc[zone] = (acc[zone] || 0) + Number(curr.count);
+  //     return acc;
+  //   },
+  //   {} as Record<string, number>,
+  // );
 
   return {
     sources: sourceBreakdown.map((s) => ({
@@ -135,9 +168,17 @@ export async function getAnalyticsBreakdowns(filters: AnalyticsFilters) {
       label: c.campaign || "None",
       count: c.count,
     })),
-    zones: Object.entries(postcodeStats).map(([zone, count]) => ({
-      label: zone,
-      count,
+    mediums: mediumBreakdown.map((m) => ({
+      label: m.medium || "None",
+      count: m.count,
+    })),
+    contents: contentBreakdown.map((c) => ({
+      label: c.content || "None",
+      count: c.count,
+    })),
+    terms: termBreakdown.map((t) => ({
+      label: t.term || "None",
+      count: t.count,
     })),
   };
 }

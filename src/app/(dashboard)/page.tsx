@@ -1,10 +1,10 @@
 export const dynamic = "force-dynamic";
 
-import { CampaignChart } from "@/components/CampaignChart";
+import { AnalyticsChart } from "@/components/AnalyticsChart";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  getCampaignDistribution,
+  getAnalyticsDistribution,
   getDashboardStats,
   getRecentActivity,
 } from "@/lib/services/dashboard";
@@ -14,7 +14,11 @@ import { Clock, Globe, Link2, MousePointer2, TrendingUp } from "lucide-react";
 export default async function AdminDashboard() {
   const { totalLinks, totalClicks, topCampaign } = await getDashboardStats();
   const recentClicks = await getRecentActivity();
-  const campaignDistribution = await getCampaignDistribution();
+  const sourceDist = await getAnalyticsDistribution("utmSource");
+  const mediumDist = await getAnalyticsDistribution("utmMedium");
+  const campaignDist = await getAnalyticsDistribution("utmCampaign");
+  const contentDist = await getAnalyticsDistribution("utmContent");
+  const termDist = await getAnalyticsDistribution("utmTerm");
 
   const stats = [
     {
@@ -40,7 +44,7 @@ export default async function AdminDashboard() {
     },
     {
       title: "Top Source",
-      value: "Nextdoor", // This could also be dynamic if needed
+      value: sourceDist[0]?.label || "None",
       icon: Globe,
       color: "text-amber-600",
       bg: "bg-amber-50",
@@ -114,12 +118,63 @@ export default async function AdminDashboard() {
             </div>
           </CardContent>
         </Card>
+
+        <div className="grid gap-6">
+          <Card className="border shadow-sm">
+            <CardHeader>
+              <CardTitle className="text-sm font-semibold uppercase tracking-wider text-slate-500">
+                Campaign Distribution
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <AnalyticsChart data={campaignDist} height={200} />
+            </CardContent>
+          </Card>
+
+          <Card className="border shadow-sm">
+            <CardHeader>
+              <CardTitle className="text-sm font-semibold uppercase tracking-wider text-slate-500">
+                Source Distribution
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <AnalyticsChart data={sourceDist} height={200} />
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-3">
         <Card className="border shadow-sm">
           <CardHeader>
-            <CardTitle>Campaign Distribution</CardTitle>
+            <CardTitle className="text-sm font-semibold uppercase tracking-wider text-slate-500">
+              Medium Distribution
+            </CardTitle>
           </CardHeader>
-          <CardContent className="pt-4">
-            <CampaignChart data={campaignDistribution} />
+          <CardContent>
+            <AnalyticsChart data={mediumDist} height={180} />
+          </CardContent>
+        </Card>
+
+        <Card className="border shadow-sm">
+          <CardHeader>
+            <CardTitle className="text-sm font-semibold uppercase tracking-wider text-slate-500">
+              Content Distribution
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <AnalyticsChart data={contentDist} height={180} />
+          </CardContent>
+        </Card>
+
+        <Card className="border shadow-sm">
+          <CardHeader>
+            <CardTitle className="text-sm font-semibold uppercase tracking-wider text-slate-500">
+              Term Distribution
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <AnalyticsChart data={termDist} height={180} />
           </CardContent>
         </Card>
       </div>

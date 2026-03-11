@@ -8,7 +8,7 @@ export async function getDashboardStats() {
   const [linksCount] = await db.select({ value: count() }).from(links);
   const [clicksCount] = await db.select({ value: count() }).from(clicks);
 
-  const campaigns = await db
+  const [campaigns] = await db
     .select({
       campaign: links.utmCampaign,
       count: count(clicks.id),
@@ -22,11 +22,11 @@ export async function getDashboardStats() {
   return {
     totalLinks: linksCount.value,
     totalClicks: clicksCount.value,
-    topCampaign: campaigns[0]?.campaign || "None",
+    topCampaign: campaigns?.campaign || "None",
   };
 }
 
-export async function getRecentActivity(limit = 5) {
+export async function getRecentActivity(limit = 9) {
   return await db
     .select({
       id: clicks.id,
@@ -40,21 +40,29 @@ export async function getRecentActivity(limit = 5) {
     .limit(limit);
 }
 
-export async function getCampaignDistribution(limit = 5) {
+export async function getAnalyticsDistribution(
+  dimension:
+    | "utmSource"
+    | "utmMedium"
+    | "utmCampaign"
+    | "utmContent"
+    | "utmTerm",
+  limit = 5,
+) {
   const distribution = await db
     .select({
-      name: links.utmCampaign,
+      name: links[dimension],
       total: count(clicks.id),
     })
     .from(links)
     .leftJoin(clicks, eq(links.id, clicks.linkId))
-    .where(sql`${links.utmCampaign} IS NOT NULL`)
-    .groupBy(links.utmCampaign)
-    .orderBy(desc(count(clicks.id)))
+    .where(sql`${links[dimension]} IS NOT NULL`)
+    .groupBy(links[dimension])
+    // .orderBy(desc(count(clicks.id)))
     .limit(limit);
 
   return distribution.map((d) => ({
-    name: d.name || "Unknown",
-    total: Number(d.total),
+    label: d.name || "Unknown",
+    count: Number(d.total),
   }));
 }
