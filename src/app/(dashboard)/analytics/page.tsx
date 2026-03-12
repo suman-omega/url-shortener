@@ -55,10 +55,12 @@ export default async function AnalyticsPage(props: {
         />
       </div>
 
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-5">
         <BreakdownCard title="By Source" items={breakdowns.sources} />
+        <BreakdownCard title="By Medium" items={breakdowns.mediums} />
         <BreakdownCard title="By Campaign" items={breakdowns.campaigns} />
-        <BreakdownCard title="By Postcode/Zone" items={breakdowns.zones} />
+        <BreakdownCard title="By Content" items={breakdowns.contents} />
+        <BreakdownCard title="By Term" items={breakdowns.terms} />
       </div>
 
       <div className="bg-white dark:bg-slate-900 border rounded-xl overflow-hidden shadow-sm">
